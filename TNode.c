@@ -36,23 +36,32 @@ void appendNode(struct TNode** headRef, int val) {
     current->next = newNode;
 }
 
-void deleteLinkedList(struct TNode** headRef) {
-    if (*headRef == NULL) {
-        printf("Die Linked List ist bereits leer.\n");
+void updateAllNodeValues(struct TNode* head, int newValue) {
+    if (head == NULL) {
+        printf("Die Linked List ist leer.\n");
         return;
     }
 
-    struct TNode* current = *headRef;
-    struct TNode* temp;
-
+    struct TNode* current = head;
     while (current != NULL) {
-        temp = current->next;
-        free(current);
-        current = temp;
+        current->value = newValue;
+        current = current->next;
+    }
+}
+
+void printLinkedList(struct TNode* head) {
+    if (head == NULL) {
+        printf("Die Linked List ist leer.\n");
+        return;
     }
 
-    *headRef = NULL;
-    printf("Die Linked List wurde gelöscht und der Speicher freigegeben.\n");
+    struct TNode* current = head;
+    printf("Linked List: ");
+    while (current != NULL) {
+        printf("%d -> ", current->value);
+        current = current->next;
+    }
+    printf("NULL\n");
 }
 
 int main() {
@@ -62,9 +71,22 @@ int main() {
     appendNode(&head, 20);
     appendNode(&head, 30);
 
-    printf("Die Linked List vor dem Löschen:\n");
+    printf("Die Linked List vor der Aktualisierung:\n");
+    printLinkedList(head);
 
-    deleteLinkedList(&head); 
+    int newValueForAllNodes = 50;
+    updateAllNodeValues(head, newValueForAllNodes);
+
+    printf("\nDie Linked List nach der Aktualisierung aller Knoten:\n");
+    printLinkedList(head);
+
+    struct TNode* current = head;
+    struct TNode* temp;
+    while (current != NULL) {
+        temp = current->next;
+        free(current);
+        current = temp;
+    }
 
     return 0;
 }
